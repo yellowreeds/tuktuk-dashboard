@@ -102,100 +102,104 @@ export default function Dashboard() {
   return (
     <main className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-[#1A237E] text-white px-8 py-6">
+      <div className="bg-[#1A237E] text-white px-4 md:px-8 py-5 md:py-6">
         <p className="text-blue-300 text-xs font-bold tracking-widest uppercase">TukTuk Campaign</p>
-        <h1 className="text-3xl font-bold mt-1">SMS Dashboard</h1>
+        <h1 className="text-2xl md:text-3xl font-bold mt-1">SMS Dashboard</h1>
         <p className="text-blue-300 text-sm mt-1">Real-time incoming message monitor</p>
       </div>
 
-      <div className="px-8 py-6">
+      <div className="px-4 md:px-8 py-4 md:py-6">
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="bg-white rounded-xl shadow-sm p-5 border-l-4 border-[#1A237E]">
-            <p className="text-gray-500 text-sm">Total SMS</p>
-            <p className="text-4xl font-bold text-[#1A237E] mt-1">{totalSms}</p>
+        <div className="grid grid-cols-3 md:grid-cols-3 gap-3 md:gap-4 mb-4 md:mb-6">
+          <div className="bg-white rounded-xl shadow-sm p-3 md:p-5 border-l-4 border-[#1A237E]">
+            <p className="text-gray-500 text-xs md:text-sm">Total SMS</p>
+            <p className="text-2xl md:text-4xl font-bold text-[#1A237E] mt-1">{totalSms}</p>
           </div>
-          <div className="bg-white rounded-xl shadow-sm p-5 border-l-4 border-green-500">
-            <p className="text-gray-500 text-sm">Today</p>
-            <p className="text-4xl font-bold text-green-600 mt-1">{todaySms}</p>
+          <div className="bg-white rounded-xl shadow-sm p-3 md:p-5 border-l-4 border-green-500">
+            <p className="text-gray-500 text-xs md:text-sm">Today</p>
+            <p className="text-2xl md:text-4xl font-bold text-green-600 mt-1">{todaySms}</p>
           </div>
-          <div className="bg-white rounded-xl shadow-sm p-5 border-l-4 border-blue-400">
-            <p className="text-gray-500 text-sm">This Week</p>
-            <p className="text-4xl font-bold text-blue-500 mt-1">{weekSms}</p>
+          <div className="bg-white rounded-xl shadow-sm p-3 md:p-5 border-l-4 border-blue-400">
+            <p className="text-gray-500 text-xs md:text-sm">This Week</p>
+            <p className="text-2xl md:text-4xl font-bold text-blue-500 mt-1">{weekSms}</p>
           </div>
         </div>
 
         {/* Table controls */}
-        <div className="bg-white rounded-xl shadow-sm p-5">
-          <div className="flex justify-between items-center mb-4">
+        <div className="bg-white rounded-xl shadow-sm p-4 md:p-5">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-4">
             <h2 className="text-lg font-bold text-gray-800">Message List</h2>
-            <div className="flex gap-3">
+            <div className="flex flex-col md:flex-row gap-2 md:gap-3">
               <input
                 type="text"
                 placeholder="Search by number or message..."
                 value={search}
                 onChange={e => { setSearch(e.target.value); setPage(0) }}
-                className="border border-gray-300 rounded-lg px-4 py-2 text-sm w-72 focus:outline-none focus:ring-2 focus:ring-[#1A237E] placeholder-gray-800 text-gray-900"
+                className="border border-gray-300 rounded-lg px-4 py-2 text-sm w-full md:w-72 focus:outline-none focus:ring-2 focus:ring-[#1A237E] placeholder-gray-800 text-gray-900"
               />
-              <button
-                onClick={fetchMessages}
-                className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-lg text-sm flex items-center gap-2"
-              >
-                <ArrowPathIcon className="w-4 h-4" />
-                Refresh
-              </button>
-              <button
-                onClick={downloadCsv}
-                className="bg-[#1A237E] hover:bg-[#283593] text-white font-semibold px-4 py-2 rounded-lg text-sm flex items-center gap-2"
-              >
-                <ArrowDownTrayIcon className="w-4 h-4" />
-                Download CSV
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={fetchMessages}
+                  className="flex-1 md:flex-none bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2"
+                >
+                  <ArrowPathIcon className="w-4 h-4" />
+                  Refresh
+                </button>
+                <button
+                  onClick={downloadCsv}
+                  className="flex-1 md:flex-none bg-[#1A237E] hover:bg-[#283593] text-white font-semibold px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2"
+                >
+                  <ArrowDownTrayIcon className="w-4 h-4" />
+                  Download CSV
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* Table */}
+          {/* Table — horizontally scrollable on mobile */}
           {loading ? (
             <div className="text-center py-12 text-gray-400">Loading...</div>
           ) : (
             <>
-              <table className="w-full text-sm table-auto">
-                <thead>
-                  <tr className="bg-gray-50 text-gray-600 uppercase text-xs tracking-wider">
-                    <th className="px-4 py-3 text-left">ID</th>
-                    <th className="px-4 py-3 text-left">Phone Number</th>
-                    <th className="px-4 py-3 text-left">Message</th>
-                    <th className="px-4 py-3 text-left">Received At</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {paginated.length === 0 ? (
-                    <tr>
-                      <td colSpan={4} className="text-center py-12 text-gray-400">
-                        No messages found
-                      </td>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm table-auto">
+                  <thead>
+                    <tr className="bg-gray-50 text-gray-600 uppercase text-xs tracking-wider">
+                      <th className="px-4 py-3 text-left">ID</th>
+                      <th className="px-4 py-3 text-left">Phone Number</th>
+                      <th className="px-4 py-3 text-left">Message</th>
+                      <th className="px-4 py-3 text-left">Received At</th>
                     </tr>
-                  ) : (
-                    paginated.map((msg, index) => (
-                      <tr
-                        key={msg.id}
-                        className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
-                      >
-                        <td className="px-4 py-3 text-gray-400 font-mono whitespace-nowrap">{msg.id}</td>
-                        <td className="px-4 py-3 font-semibold text-[#1A237E] whitespace-nowrap">
-                          {formatPhoneNumber(msg.phone_number)}
+                  </thead>
+                  <tbody>
+                    {paginated.length === 0 ? (
+                      <tr>
+                        <td colSpan={4} className="text-center py-12 text-gray-400">
+                          No messages found
                         </td>
-                        <td className="px-4 py-3 text-gray-700">{msg.message_content}</td>
-                        <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{formatDate(msg.received_at)}</td>
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+                    ) : (
+                      paginated.map((msg, index) => (
+                        <tr
+                          key={msg.id}
+                          className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
+                        >
+                          <td className="px-4 py-3 text-gray-400 font-mono whitespace-nowrap">{msg.id}</td>
+                          <td className="px-4 py-3 font-semibold text-[#1A237E] whitespace-nowrap">
+                            {formatPhoneNumber(msg.phone_number)}
+                          </td>
+                          <td className="px-4 py-3 text-gray-700">{msg.message_content}</td>
+                          <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{formatDate(msg.received_at)}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
+                <div className="flex flex-col md:flex-row justify-between items-center gap-3 mt-4 pt-4 border-t border-gray-100">
                   <p className="text-sm text-gray-500">
                     Showing {page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, filtered.length)} of {filtered.length}
                   </p>
