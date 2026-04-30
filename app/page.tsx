@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
-import { ArrowPathIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline'
+import { ArrowPathIcon, ArrowDownTrayIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 
 interface SmsMessage {
   id: number
@@ -135,7 +135,7 @@ export default function Dashboard() {
                 placeholder="Search by number or message..."
                 value={search}
                 onChange={e => { setSearch(e.target.value); setPage(0) }}
-                className="border border-gray-300 rounded-lg px-4 py-2 text-sm w-72 focus:outline-none focus:ring-2 focus:ring-[#1A237E] placeholder-gray-800"
+                className="border border-gray-300 rounded-lg px-4 py-2 text-sm w-72 focus:outline-none focus:ring-2 focus:ring-[#1A237E] placeholder-gray-800 text-gray-900"
               />
               <button
                 onClick={fetchMessages}
@@ -159,13 +159,13 @@ export default function Dashboard() {
             <div className="text-center py-12 text-gray-400">Loading...</div>
           ) : (
             <>
-              <table className="w-full text-sm">
+              <table className="w-full text-sm table-auto">
                 <thead>
                   <tr className="bg-gray-50 text-gray-600 uppercase text-xs tracking-wider">
-                    <th className="px-4 py-3 text-left w-16">ID</th>
-                    <th className="px-4 py-3 text-left w-40">Phone Number</th>
+                    <th className="px-4 py-3 text-left">ID</th>
+                    <th className="px-4 py-3 text-left">Phone Number</th>
                     <th className="px-4 py-3 text-left">Message</th>
-                    <th className="px-4 py-3 text-left w-44">Received At</th>
+                    <th className="px-4 py-3 text-left">Received At</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -181,12 +181,12 @@ export default function Dashboard() {
                         key={msg.id}
                         className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
                       >
-                        <td className="px-4 py-3 text-gray-400 font-mono">{msg.id}</td>
-                        <td className="px-4 py-3 font-semibold text-[#1A237E]">
+                        <td className="px-4 py-3 text-gray-400 font-mono whitespace-nowrap">{msg.id}</td>
+                        <td className="px-4 py-3 font-semibold text-[#1A237E] whitespace-nowrap">
                           {formatPhoneNumber(msg.phone_number)}
                         </td>
                         <td className="px-4 py-3 text-gray-700">{msg.message_content}</td>
-                        <td className="px-4 py-3 text-gray-500">{formatDate(msg.received_at)}</td>
+                        <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{formatDate(msg.received_at)}</td>
                       </tr>
                     ))
                   )}
@@ -203,19 +203,21 @@ export default function Dashboard() {
                     <button
                       onClick={() => setPage(p => Math.max(0, p - 1))}
                       disabled={page === 0}
-                      className="px-3 py-1 rounded border text-sm disabled:opacity-40 hover:bg-gray-50"
+                      className="px-3 py-1 rounded border text-sm disabled:opacity-40 hover:bg-gray-50 text-gray-700 font-medium flex items-center gap-1"
                     >
-                      ← Prev
+                      <ArrowLeftIcon className="w-3 h-3" />
+                      Prev
                     </button>
-                    <span className="px-3 py-1 text-sm text-gray-600">
+                    <span className="px-3 py-1 text-sm text-gray-700">
                       {page + 1} / {totalPages}
                     </span>
                     <button
                       onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
                       disabled={page === totalPages - 1}
-                      className="px-3 py-1 rounded border text-sm disabled:opacity-40 hover:bg-gray-50"
+                      className="px-3 py-1 rounded border text-sm disabled:opacity-40 hover:bg-gray-50 text-gray-700 font-medium flex items-center gap-1"
                     >
-                      Next →
+                      Next
+                      <ArrowRightIcon className="w-3 h-3" />
                     </button>
                   </div>
                 </div>
