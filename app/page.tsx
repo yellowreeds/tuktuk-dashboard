@@ -135,7 +135,7 @@ export default function Dashboard() {
                 placeholder="Search by number or message..."
                 value={search}
                 onChange={e => { setSearch(e.target.value); setPage(0) }}
-                className="border border-gray-300 rounded-lg px-4 py-2 text-sm w-72 focus:outline-none focus:ring-2 focus:ring-[#1A237E]"
+                className="border border-gray-300 rounded-lg px-4 py-2 text-sm w-72 focus:outline-none focus:ring-2 focus:ring-[#1A237E] placeholder-gray-800"
               />
               <button
                 onClick={fetchMessages}
