@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { ArrowPathIcon, ArrowDownTrayIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
+import { useRouter } from 'next/navigation'
+import { getSession, signOut } from '../lib/auth'
 
 interface SmsMessage {
   id: number
@@ -35,6 +37,16 @@ function formatDate(timestamp: number): string {
 }
 
 export default function Dashboard() {
+  const router = useRouter()
+
+  useEffect(() => {
+    // Check session on load
+    getSession().then(session => {
+      if (!session) {
+        router.push('/login')
+      }
+    })
+  }, [])
   const [messages, setMessages] = useState<SmsMessage[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -103,9 +115,22 @@ export default function Dashboard() {
     <main className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-[#1A237E] text-white px-4 md:px-8 py-5 md:py-6">
-        <p className="text-blue-300 text-xs font-bold tracking-widest uppercase">TukTuk Campaign</p>
-        <h1 className="text-2xl md:text-3xl font-bold mt-1">SMS Dashboard</h1>
-        <p className="text-blue-300 text-sm mt-1">Real-time incoming message monitor</p>
+        <div className="flex justify-between items-start">
+          <div>
+            <p className="text-blue-300 text-xs font-bold tracking-widest uppercase">TukTuk Campaign</p>
+            <h1 className="text-2xl md:text-3xl font-bold mt-1">SMS Dashboard</h1>
+            <p className="text-blue-300 text-sm mt-1">Real-time incoming message monitor</p>
+          </div>
+          <button
+            onClick={async () => {
+              await signOut()
+              router.push('/login')
+            }}
+            className="text-blue-300 hover:text-white text-sm font-medium mt-1"
+          >
+            Sign Out
+          </button>
+        </div>
       </div>
 
       <div className="px-4 md:px-8 py-4 md:py-6">
